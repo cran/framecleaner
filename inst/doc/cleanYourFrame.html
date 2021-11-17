@@ -142,8 +142,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(framecleaner)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(printr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
 <p>Data imported from excel and csv in business situations can have messy characteristics and data formats. This package provides functions to tidy your data frame using the power of <code>tidyselect</code>.</p>
 <p><strong>create sample data</strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
@@ -153,223 +152,83 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> sample_table</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>sample_table</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">date</th>
-<th align="right">numeric_val</th>
-<th align="left">char_val</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">20190101</td>
-<td align="right">1</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">20190305</td>
-<td align="right">NA</td>
-<td align="left">val</td>
-</tr>
-<tr class="odd">
-<td align="left">20201012</td>
-<td align="right">5</td>
-<td align="left">-</td>
-</tr>
-</tbody>
-</table>
+<pre><code>## # A tibble: 3 × 3
+##   date     numeric_val char_val  
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     
+## 1 20190101           1 &quot;&quot;        
+## 2 20190305          NA &quot;    val &quot;
+## 3 20201012           5 &quot;-&quot;</code></pre>
 <div id="set-nas" class="section level1">
 <h1>set nas</h1>
 <p>Data occasionally has different ways to represent NA values. <code>set_na</code> checks as default <code>c(&quot;-&quot;, &quot;&quot;, &quot; &quot;, &quot;null&quot;)</code> but any values can be supplied to automatically be set to NA. This is helpful when you want to check the NA profile of a data frame using <code>validata::diagnose</code></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_na</span>()</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">date</th>
-<th align="right">numeric_val</th>
-<th align="left">char_val</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">20190101</td>
-<td align="right">1</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="left">20190305</td>
-<td align="right">NA</td>
-<td align="left">val</td>
-</tr>
-<tr class="odd">
-<td align="left">20201012</td>
-<td align="right">5</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_na</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##   date     numeric_val char_val  
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     
+## 1 20190101           1  &lt;NA&gt;     
+## 2 20190305          NA &quot;    val &quot;
+## 3 20201012           5  &lt;NA&gt;</code></pre>
 </div>
 <div id="remove-whitespace" class="section level1">
 <h1>remove whitespace</h1>
 <p>remove whitespace from the ends of character variables that may be otherwise undetectable by inspection.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">remove_whitespace</span>()</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">date</th>
-<th align="right">numeric_val</th>
-<th align="left">char_val</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">20190101</td>
-<td align="right">1</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">20190305</td>
-<td align="right">NA</td>
-<td align="left">val</td>
-</tr>
-<tr class="odd">
-<td align="left">20201012</td>
-<td align="right">5</td>
-<td align="left">-</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">remove_whitespace</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##   date     numeric_val char_val
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;   
+## 1 20190101           1 &quot;&quot;      
+## 2 20190305          NA &quot;val&quot;   
+## 3 20201012           5 &quot;-&quot;</code></pre>
 </div>
 <div id="set-dates" class="section level1">
 <h1>set dates</h1>
 <p>automatically convert character columns that should be dates.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_date</span>()</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">date</th>
-<th align="right">numeric_val</th>
-<th align="left">char_val</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">2019-01-01</td>
-<td align="right">1</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">2019-03-05</td>
-<td align="right">NA</td>
-<td align="left">val</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-10-12</td>
-<td align="right">5</td>
-<td align="left">-</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_date</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##   date       numeric_val char_val  
+##   &lt;date&gt;           &lt;dbl&gt; &lt;chr&gt;     
+## 1 2019-01-01           1 &quot;&quot;        
+## 2 2019-03-05          NA &quot;    val &quot;
+## 3 2020-10-12           5 &quot;-&quot;</code></pre>
 </div>
 <div id="relocate-all" class="section level1">
 <h1>relocate all</h1>
 <p>relocates an unorganized dataframe using heuristics such as putting character and date columns first, and organizing by alphabetical order.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate_all</span>()</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">date</th>
-<th align="left">char_val</th>
-<th align="right">numeric_val</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">20190101</td>
-<td align="left"></td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">20190305</td>
-<td align="left">val</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">20201012</td>
-<td align="left">-</td>
-<td align="right">5</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate_all</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##   date     char_val   numeric_val
+##   &lt;chr&gt;    &lt;chr&gt;            &lt;dbl&gt;
+## 1 20190101 &quot;&quot;                   1
+## 2 20190305 &quot;    val &quot;          NA
+## 3 20201012 &quot;-&quot;                  5</code></pre>
 </div>
 <div id="clean-frame" class="section level1">
 <h1>clean frame</h1>
-<p>Wrapper function to apply all cleaning operations to a data frame using sensible defaults. I encourage you to build your own <code>clean_frame</code> function to suit your needs.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_frame</span>()</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="right">DATE</th>
-<th align="right">NUMERIC_VAL</th>
-<th align="left">CHAR_VAL</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">20190101</td>
-<td align="right">1</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="right">20190305</td>
-<td align="right">NA</td>
-<td align="left">val</td>
-</tr>
-<tr class="odd">
-<td align="right">20201012</td>
-<td align="right">5</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
+<p>Wrapper function to apply all cleaning operations to a data frame using sensible defaults.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_frame</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##       DATE NUMERIC_VAL CHAR_VAL  
+##      &lt;int&gt;       &lt;int&gt; &lt;chr&gt;     
+## 1 20190101           1  &lt;NA&gt;     
+## 2 20190305          NA &quot;    val &quot;
+## 3 20201012           5  &lt;NA&gt;</code></pre>
 </div>
 <div id="fill-nas" class="section level1">
 <h1>fill nas</h1>
 <p>use tidyselect to fill NAs with a single value</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill_na</span>()</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">date</th>
-<th align="right">numeric_val</th>
-<th align="left">char_val</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">20190101</td>
-<td align="right">1</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">20190305</td>
-<td align="right">0</td>
-<td align="left">val</td>
-</tr>
-<tr class="odd">
-<td align="left">20201012</td>
-<td align="right">5</td>
-<td align="left">-</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sample_table <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill_na</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##   date     numeric_val char_val  
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     
+## 1 20190101           1 &quot;&quot;        
+## 2 20190305           0 &quot;    val &quot;
+## 3 20201012           5 &quot;-&quot;</code></pre>
 </div>
 
 
